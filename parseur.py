@@ -25,7 +25,7 @@ def puttabintab(tab):
             print "loading 6 ... ok"
         if "97FA28F91B03560F00F31B2C /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 7 ok..."
+            print "loading 7 ... ok"
         i = i + 1
     return tabbuilds
 
@@ -59,10 +59,25 @@ def formattab(tab):
     return tab
 
 
+def selecttab(files):
+    i = 0
+    intmax = 0
+    max = []
+    while i in xrange(len(files)):
+        tab = files[i].split(" ")
+        if len(tab) > len(max):
+            intmax = i
+            max = tab
+        i = i + 1
+    print "selected build", intmax, "as default"
+    return i - 1
+
+
 def showdiff(tab):
-    i = 1
+    default = selecttab(tab)
+    i = 0
     while i in xrange(len(tab)):
-        if tab[0] == tab[i]:
+        if tab[default] == tab[i]:
             print i, "is good"
         else:
             print i, "check fail"
