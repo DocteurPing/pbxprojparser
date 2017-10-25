@@ -73,7 +73,7 @@ def selecttab(files):
     return intmax
 
 
-def checkequal(str1, str2):
+def checkequal(str1, str2, ignorefile):
     tab1 = str1.split(" ")
     tab2 = str2.split(" ")
     i1 = 0
@@ -82,7 +82,7 @@ def checkequal(str1, str2):
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
-            if tab1[i1] == tab2[i2]:
+            if tab1[i1] == tab2[i2] or tab1[i1] in ignorefile:
                 check = 0
                 i2 = i2 + 1
                 continue
@@ -95,11 +95,11 @@ def checkequal(str1, str2):
     return check2
 
 
-def showdiff(tab):
+def showdiff(tab, ignorefile):
     default = selecttab(tab)
     i = 0
     while i in xrange(len(tab)):
-        if checkequal(tab[default], tab[i]) == 0:
+        if checkequal(tab[default], tab[i], ignorefile) == 0:
             print i, "is good"
         else:
             print i, "check fail"
@@ -109,11 +109,14 @@ def showdiff(tab):
 def main():
     print("starting...")
     inputfile = open('project.pbxproj')
+    inputignorefile = open('ignorefile')
     contenu = inputfile.read()
+    ignorefile = inputignorefile.read()
     tab = contenu.split("};")
     tabbuilds = puttabintab(tab)
     tabbuilds = formattab(tabbuilds)
-    showdiff(tabbuilds)
+    showdiff(tabbuilds, ignorefile)
+    inputignorefile.close()
     inputfile.close()
 
 
