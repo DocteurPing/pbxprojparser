@@ -42,7 +42,7 @@ def getfiles(tab):
     tabfiles = []
     i = 0
     while i in xrange(len(splittab)):
-        if "xib" in splittab[i]:
+        if ".xib" in splittab[i] or ".swift" in splittab[i] or ".m" in splittab[i] or ".storyboard" in splittab[i] or ".xml" in splittab[i]:
             tab2 = splittab[i].split("*")
             tabfiles.append(tab2[1])
         i = i + 1
