@@ -78,6 +78,7 @@ def checkequal(str1, str2):
     tab2 = str2.split(" ")
     i1 = 0
     check = -1
+    check2 = 0
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
@@ -88,9 +89,10 @@ def checkequal(str1, str2):
             i2 = i2 + 1
         if check == -1:
             print tab1[i1], "is missing"
+            check2 = -1
         check = -1
         i1 = i1 + 1
-    return -1
+    return check2
 
 
 def showdiff(tab):
