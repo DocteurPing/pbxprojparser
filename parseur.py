@@ -1,5 +1,7 @@
 #!/usr/bin/python2.7
 
+import sys
+
 
 def puttabintab(tab):
     i = 0
@@ -42,7 +44,8 @@ def getfiles(tab):
     tabfiles = []
     i = 0
     while i in xrange(len(splittab)):
-        if ".xib" in splittab[i] or ".swift" in splittab[i] or ".m" in splittab[i] or ".storyboard" in splittab[i] or ".xml" in splittab[i]:
+        if ".xib" in splittab[i] or ".swift" in splittab[i] or ".m" in splittab[i] or ".storyboard" in splittab[i] or \
+                        ".xml" in splittab[i]:
             tab2 = splittab[i].split("*")
             tabfiles.append(tab2[1])
         i = i + 1
@@ -71,6 +74,7 @@ def selecttab(files):
         i = i + 1
     print "selected build", intmax, "as default"
     return intmax
+
 
 def checkequal(str1, str2, ignorefile):
     tab1 = str1.split(" ")
@@ -112,10 +116,17 @@ def showdiff(tab, ignorefile):
 
 def main():
     print("starting...")
-    inputfile = open('project.pbxproj')
-    inputignorefile = open('ignorefile')
-    contenu = inputfile.read()
-    ignorefile = inputignorefile.read()
+    try:
+        inputfile = open(sys.argv[1])
+        contenu = inputfile.read()
+    except:
+        print "use ./parser.py file.pbxproj"
+        return
+    try:
+        inputignorefile = open('ignorefile')
+        ignorefile = inputignorefile.read()
+    except:
+        ignorefile = None
     tab = contenu.split("};")
     tabbuilds = puttabintab(tab)
     tabbuilds = formattab(tabbuilds)
