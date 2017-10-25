@@ -70,7 +70,7 @@ def selecttab(files):
             max = tab
         i = i + 1
     print "selected build", intmax, "as default"
-    return 0
+    return intmax
 
 
 def checkequal(str1, str2):
@@ -83,12 +83,14 @@ def checkequal(str1, str2):
         while i2 in xrange(len(tab2)):
             if tab1[i1] == tab2[i2]:
                 check = 0
+                i2 = i2 + 1
+                continue
             i2 = i2 + 1
         if check == -1:
-            return -1
+            print tab1[i1], "is missing"
         check = -1
         i1 = i1 + 1
-    return 0
+    return -1
 
 
 def showdiff(tab):
@@ -109,7 +111,6 @@ def main():
     tab = contenu.split("};")
     tabbuilds = puttabintab(tab)
     tabbuilds = formattab(tabbuilds)
-    printtab(tabbuilds)
     showdiff(tabbuilds)
     inputfile.close()
 
