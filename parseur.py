@@ -111,9 +111,9 @@ def showdiff(tab, ignorefile):
     default = selecttab(tab)
     while i in xrange(len(tab)):
         if checkequal(tab[default], tab[i], ignorefile) == 0:
-            print '>', nom[i], "is good"
+            print '==========>', nom[i], "is good\n"
         else:
-            print nom[i], "check fail"
+            print '==========>', nom[i], "check fail\n"
         i = i + 1
 
 
@@ -125,14 +125,32 @@ def searchfile(tab, str):
         i = i + 1
 
 
+def findpath(str1):
+    i = 0
+    while i in xrange(len(nom)):
+        if str1.lower() in nom[i].lower():
+            return i
+        i = i + 1
+    return i
+
+
+def targetfile(tab, str, ignorefile):
+    i = findpath(str)
+    default = selecttab(tab)
+    if checkequal(tab[default], tab[i], ignorefile) == 0:
+        print '==========>', nom[i], "is good\n"
+    else:
+        print '==========>', nom[i], "check fail\n"
+
+
 def main():
     print("starting...")
     if len(sys.argv) == 2:
         inputfile = open(sys.argv[1])
-    elif len(sys.argv) == 4:
+    elif len(sys.argv) == 4 and (sys.argv[1] == "-s" or sys.argv[1] == "-t"):
         inputfile = open(sys.argv[2])
     else:
-        print "use ./parser.py [-f] file.pbxproj [string to search]"
+        print "use ./parser.py [-s][-t] file.pbxproj [string to search][]"
         return
     contenu = inputfile.read()
     try:
@@ -143,8 +161,10 @@ def main():
     tab = contenu.split("};")
     tabbuilds = puttabintab(tab)
     tabbuilds = formattab(tabbuilds)
-    if len(sys.argv) == 4:
+    if len(sys.argv) == 4 and sys.argv[1] == "-s":
         searchfile(tabbuilds, sys.argv[3])
+    elif len(sys.argv) == 4 and sys.argv[1] == "-t":
+        targetfile(tabbuilds, sys.argv[3], ignorefile)
     else:
         showdiff(tabbuilds, ignorefile)
     if ignorefile is not None:
