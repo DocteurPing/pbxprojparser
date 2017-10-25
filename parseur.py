@@ -70,14 +70,32 @@ def selecttab(files):
             max = tab
         i = i + 1
     print "selected build", intmax, "as default"
-    return i - 1
+    return 0
+
+
+def checkequal(str1, str2):
+    tab1 = str1.split(" ")
+    tab2 = str2.split(" ")
+    i1 = 0
+    check = -1
+    while i1 in xrange(len(tab1)):
+        i2 = 0
+        while i2 in xrange(len(tab2)):
+            if tab1[i1] == tab2[i2]:
+                check = 0
+            i2 = i2 + 1
+        if check == -1:
+            return -1
+        check = -1
+        i1 = i1 + 1
+    return 0
 
 
 def showdiff(tab):
     default = selecttab(tab)
     i = 0
     while i in xrange(len(tab)):
-        if tab[default] == tab[i]:
+        if checkequal(tab[default], tab[i]) == 0:
             print i, "is good"
         else:
             print i, "check fail"
