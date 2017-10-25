@@ -2,6 +2,9 @@
 
 import sys
 
+nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "Banque Savoie Pro",
+       "Credit Maritime Pro", "Banque Populaire Pro"]
+
 
 def puttabintab(tab):
     i = 0
@@ -9,25 +12,25 @@ def puttabintab(tab):
     while i in xrange(len(tab)):
         if "94026BDD15E24582001BBF61 /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 1 ... ok"
+            print "Loading Credit Maritime ... ok"
         if "94026C2515E24588001BBF61 /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 2 ... ok"
+            print "Loading Banque de Savoie ... ok"
         if "94780DA213C5B3D300D2D360 /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 3 ... ok"
+            print "Loading Banque Populaire ... ok"
         if "94780DC613C5B3D400D2D360 /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 4 ... ok"
+            print "Loading iBP Test ... ok"
         if "977A83441BE7657D0068058F /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 5 ... ok"
+            print "Loading Banque Savoie Pro ... ok"
         if "97B876A41BE7618D00805A22 /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 6 ... ok"
+            print "Loading Credit Maritime Pro ... ok"
         if "97FA28F91B03560F00F31B2C /* Resources */ =" in tab[i]:
             tabbuilds.append(tab[i])
-            print "loading 7 ... ok"
+            print "Loading Banque Populaire Pro ... ok"
         i = i + 1
     return tabbuilds
 
@@ -45,7 +48,7 @@ def getfiles(tab):
     i = 0
     while i in xrange(len(splittab)):
         if ".xib" in splittab[i] or ".swift" in splittab[i] or ".m" in splittab[i] or ".storyboard" in splittab[i] or \
-                        ".xml" in splittab[i]:
+                        ".xml" in splittab[i] or ".xcassets" in splittab[i]:
             tab2 = splittab[i].split("*")
             tabfiles.append(tab2[1])
         i = i + 1
@@ -82,8 +85,8 @@ def checkequal(str1, str2, ignorefile):
     i1 = 0
     check = -1
     check2 = 0
-    percent = 0
-    print '[',
+    # percent = 0
+    # print '[',
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
@@ -96,32 +99,42 @@ def checkequal(str1, str2, ignorefile):
             print tab1[i1], "is missing"
             check2 = -1
         check = -1
-        if i1 * 100 / len(tab1) > percent + 2:
-            percent = i1 * 100 / len(tab1)
-            print '=',
+        # if i1 * 100 / len(tab1) > percent + 2:
+        # percent = i1 * 100 / len(tab1)
+        # print '=',
         i1 = i1 + 1
     return check2
 
 
 def showdiff(tab, ignorefile):
-    default = selecttab(tab)
     i = 0
+    default = selecttab(tab)
     while i in xrange(len(tab)):
         if checkequal(tab[default], tab[i], ignorefile) == 0:
-            print '>', i, "is good"
+            print '>', nom[i], "is good"
         else:
-            print i, "check fail"
+            print nom[i], "check fail"
+        i = i + 1
+
+
+def searchfile(tab, str):
+    i = 0
+    while i in xrange(len(tab)):
+        if str in tab[i]:
+            print str, "in file", nom[i]
         i = i + 1
 
 
 def main():
     print("starting...")
-    try:
+    if len(sys.argv) == 2:
         inputfile = open(sys.argv[1])
-        contenu = inputfile.read()
-    except:
-        print "use ./parser.py file.pbxproj"
+    elif len(sys.argv) == 4:
+        inputfile = open(sys.argv[2])
+    else:
+        print "use ./parser.py [-f] file.pbxproj [string to search]"
         return
+    contenu = inputfile.read()
     try:
         inputignorefile = open('ignorefile')
         ignorefile = inputignorefile.read()
@@ -130,8 +143,12 @@ def main():
     tab = contenu.split("};")
     tabbuilds = puttabintab(tab)
     tabbuilds = formattab(tabbuilds)
-    showdiff(tabbuilds, ignorefile)
-    inputignorefile.close()
+    if len(sys.argv) == 4:
+        searchfile(tabbuilds, sys.argv[3])
+    else:
+        showdiff(tabbuilds, ignorefile)
+    if ignorefile is not None:
+        inputignorefile.close()
     inputfile.close()
 
 
