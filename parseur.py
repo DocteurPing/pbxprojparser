@@ -72,13 +72,14 @@ def selecttab(files):
     print "selected build", intmax, "as default"
     return intmax
 
-
 def checkequal(str1, str2, ignorefile):
     tab1 = str1.split(" ")
     tab2 = str2.split(" ")
     i1 = 0
     check = -1
     check2 = 0
+    percent = 0
+    print '[',
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
@@ -91,6 +92,9 @@ def checkequal(str1, str2, ignorefile):
             print tab1[i1], "is missing"
             check2 = -1
         check = -1
+        if i1 * 100 / len(tab1) > percent + 2:
+            percent = i1 * 100 / len(tab1)
+            print '=',
         i1 = i1 + 1
     return check2
 
@@ -100,7 +104,7 @@ def showdiff(tab, ignorefile):
     i = 0
     while i in xrange(len(tab)):
         if checkequal(tab[default], tab[i], ignorefile) == 0:
-            print i, "is good"
+            print '>', i, "is good"
         else:
             print i, "check fail"
         i = i + 1
