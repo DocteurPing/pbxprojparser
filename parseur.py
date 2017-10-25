@@ -1,66 +1,32 @@
 #!/usr/bin/python2.7
 
 
-def findstring(tab, str):
-    i = 0
-    while (str not in tab[i]) and i in xrange(len(tab)):
-        i = i + 1
-    if i == len(tab) - 1:
-        return None
-    return tab[i]
-
-
 def puttabintab(tab):
+    i = 0
     tabbuilds = []
-    print("loading 1 ...")
-    str = findstring(tab, "94026BDD15E24582001BBF61 /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        print("loading 2 ...")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
-    str = findstring(tab, "94026C2515E24588001BBF61 /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        print("loading 3 ...")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
-    str = findstring(tab, "94780DA213C5B3D300D2D360 /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        print("loading 4 ...")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
-    str = findstring(tab, "94780DC613C5B3D400D2D360 /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        print("loading 5 ...")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
-    str = findstring(tab, "977A83441BE7657D0068058F /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        print("loading 6 ...")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
-    str = findstring(tab, "97B876A41BE7618D00805A22 /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        print("loading 7 ...")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
-    str = findstring(tab, "97FA28F91B03560F00F31B2C /* Resources */ =")
-    if str is not None:
-        print("... ok")
-        tabbuilds.append(str)
-    else:
-        print("... fail")
+    while i in xrange(len(tab)):
+        if "94026BDD15E24582001BBF61 /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 1 ... ok"
+        if "94026C2515E24588001BBF61 /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 2 ... ok"
+        if "94780DA213C5B3D300D2D360 /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 3 ... ok"
+        if "94780DC613C5B3D400D2D360 /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 4 ... ok"
+        if "977A83441BE7657D0068058F /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 5 ... ok"
+        if "97B876A41BE7618D00805A22 /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 6 ... ok"
+        if "97FA28F91B03560F00F31B2C /* Resources */ =" in tab[i]:
+            tabbuilds.append(tab[i])
+            print "loading 7 ok..."
+        i = i + 1
     return tabbuilds
 
 
