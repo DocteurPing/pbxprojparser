@@ -36,13 +36,6 @@ def puttabintab(tab, ignorefile):
     return tabbuilds
 
 
-def printtab(tab):
-    i = 0
-    while i < len(tab):
-        print(tab[i])
-        i = i + 1
-
-
 def getfiles(tab):
     splittab = tab.split(",")
     tabfiles = []
@@ -91,8 +84,7 @@ def checkequal(str1, str2, ignorefile):
         while i2 in xrange(len(tab2)):
             if tab1[i1] == tab2[i2] or tab1[i1] in ignorefile:
                 check = 0
-                i2 = i2 + 1
-                continue
+                break
             i2 = i2 + 1
         if check == -1:
             print tab1[i1], "is missing"
