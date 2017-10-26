@@ -6,32 +6,33 @@ nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "B
        "Credit Maritime Pro", "Banque Populaire Pro"]
 
 
-def puttabintab(tab):
+def puttabintab(tab, ignorefile):
     i = 0
     tabbuilds = []
     while i in xrange(len(tab)):
-        if "94026BDD15E24582001BBF61 /* Resources */ =" in tab[i]:
+        if "94026BDD15E24582001BBF61 /* Resources */ =" in tab[i] and "Credit Maritime" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime ... ok"
-        if "94026C2515E24588001BBF61 /* Resources */ =" in tab[i]:
+        if "94026C2515E24588001BBF61 /* Resources */ =" in tab[i] and "Banque de Savoie" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque de Savoie ... ok"
-        if "94780DA213C5B3D300D2D360 /* Resources */ =" in tab[i]:
+        if "94780DA213C5B3D300D2D360 /* Resources */ =" in tab[i] and "Banque Populaire" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire ... ok"
-        if "94780DC613C5B3D400D2D360 /* Resources */ =" in tab[i]:
+        if "94780DC613C5B3D400D2D360 /* Resources */ =" in tab[i] and "iBP Test" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading iBP Test ... ok"
-        if "977A83441BE7657D0068058F /* Resources */ =" in tab[i]:
+        if "977A83441BE7657D0068058F /* Resources */ =" in tab[i] and "Banque Savoie Pro" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque Savoie Pro ... ok"
-        if "97B876A41BE7618D00805A22 /* Resources */ =" in tab[i]:
+        if "97B876A41BE7618D00805A22 /* Resources */ =" in tab[i] and "Credit Maritime Pro" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime Pro ... ok"
-        if "97FA28F91B03560F00F31B2C /* Resources */ =" in tab[i]:
+        if "97FA28F91B03560F00F31B2C /* Resources */ =" in tab[i] and "Banque Populaire Pro" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire Pro ... ok"
         i = i + 1
+    print ""
     return tabbuilds
 
 
@@ -85,8 +86,6 @@ def checkequal(str1, str2, ignorefile):
     i1 = 0
     check = -1
     check2 = 0
-    # percent = 0
-    # print '[',
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
@@ -99,9 +98,6 @@ def checkequal(str1, str2, ignorefile):
             print tab1[i1], "is missing"
             check2 = -1
         check = -1
-        # if i1 * 100 / len(tab1) > percent + 2:
-        # percent = i1 * 100 / len(tab1)
-        # print '=',
         i1 = i1 + 1
     return check2
 
@@ -131,16 +127,27 @@ def findpath(str1):
         if str1.lower() in nom[i].lower():
             return i
         i = i + 1
-    return i
+    return -1
 
 
-def targetfile(tab, str, ignorefile):
-    i = findpath(str)
-    default = selecttab(tab)
-    if checkequal(tab[default], tab[i], ignorefile) == 0:
-        print '==========>', nom[i], "is good\n"
-    else:
-        print '==========>', nom[i], "check fail\n"
+def targetfile(tab, str1, ignorefile):
+    default = findpath(str1)
+    i = 0
+    if default == -1:
+        print "No target available"
+        return
+    while i in xrange(len(tab)):
+        print "checking for", nom[i], "...\n"
+        checkequal(tab[default], tab[i], ignorefile)
+        i = i + 1
+
+
+def updatename(ignorefile):
+    i = 0
+    while i in xrange(len(nom)):
+        if nom[i] in ignorefile:
+            del nom[i]
+        i = i + 1
 
 
 def main():
@@ -159,7 +166,9 @@ def main():
     except:
         ignorefile = None
     tab = contenu.split("};")
-    tabbuilds = puttabintab(tab)
+    if ignorefile is not None:
+        updatename(ignorefile)
+    tabbuilds = puttabintab(tab, ignorefile)
     tabbuilds = formattab(tabbuilds)
     if len(sys.argv) == 4 and sys.argv[1] == "-s":
         searchfile(tabbuilds, sys.argv[3])
@@ -170,6 +179,7 @@ def main():
     if ignorefile is not None:
         inputignorefile.close()
     inputfile.close()
+    print "ending !"
 
 
 if __name__ == "__main__":
