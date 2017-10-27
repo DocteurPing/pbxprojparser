@@ -142,6 +142,15 @@ def updatename(ignorefile):
         i = i + 1
 
 
+def searchintarget(tab, str1, str2):
+    default = findpath(str2)
+    if default == -1:
+        print "No target available"
+        return
+    if str1 in tab[default]:
+        print str1, "in file", nom[default]
+
+
 def main():
     checks = 0
     checkt = 0
@@ -158,11 +167,7 @@ def main():
         print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
               "Must have an ignorefile even if it's an empty file"
         return
-    if (checks == 1 and checkt == 1) and len(sys.argv) < 5:
-        print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
-              "Must have an ignorefile even if it's an empty file"
-        return
-    elif (checkt == 1 or checks == 1) and len(sys.argv) < 4:
+    if ((checks == 1 and checkt == 1) and len(sys.argv) < 6) or ((checkt == 1 or checks == 1) and len(sys.argv) < 5):
         print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
               "Must have an ignorefile even if it's an empty file"
         return
@@ -170,10 +175,12 @@ def main():
     updatename(ignorefile)
     tabbuilds = puttabintab(tab, ignorefile)
     tabbuilds = formattab(tabbuilds)
-    if checks == 1:
+    if checks == 1 and checkt == 0:
         searchfile(tabbuilds, sys.argv[3])
-    elif checkt == 1:
+    elif checkt == 1 and checks == 0:
         targetfile(tabbuilds, sys.argv[3], ignorefile)
+    elif checks == 1 and checkt == 1:
+        searchintarget(tabbuilds, sys.argv[4], sys.argv[5])
     else:
         showdiff(tabbuilds, ignorefile)
     inputignorefile.close()
