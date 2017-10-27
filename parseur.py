@@ -62,12 +62,12 @@ def formattab(tab):
 def selecttab(files):
     i = 0
     intmax = 0
-    max = []
+    maxi = []
     while i in xrange(len(files)):
         tab = files[i].split(" ")
-        if len(tab) > len(max):
+        if len(tab) > len(maxi):
             intmax = i
-            max = tab
+            maxi = tab
         i = i + 1
     print "selected build", intmax, "as default"
     return intmax
@@ -105,11 +105,11 @@ def showdiff(tab, ignorefile):
         i = i + 1
 
 
-def searchfile(tab, str):
+def searchfile(tab, str1):
     i = 0
     while i in xrange(len(tab)):
-        if str in tab[i]:
-            print str, "in file", nom[i]
+        if str1 in tab[i]:
+            print str1, "in file", nom[i]
         i = i + 1
 
 
@@ -143,33 +143,40 @@ def updatename(ignorefile):
 
 
 def main():
-    print("starting...")
-    if len(sys.argv) == 2:
-        inputfile = open(sys.argv[1])
-    elif len(sys.argv) == 4 and (sys.argv[1] == "-s" or sys.argv[1] == "-t"):
-        inputfile = open(sys.argv[2])
-    else:
-        print "use ./parser.py [-s][-t] file.pbxproj [string to search][]"
-        return
-    contenu = inputfile.read()
+    checks = 0
+    checkt = 0
+    if "-s" in sys.argv:
+        checks = 1
+    if "-t" in sys.argv:
+        checkt = 1
     try:
         inputignorefile = open('ignorefile')
         ignorefile = inputignorefile.read()
+        inputfile = open(sys.argv[1])
+        contenu = inputfile.read()
     except:
-        ignorefile = None
+        print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
+              "Must have an ignorefile even if it's an empty file"
+        return
+    if (checks == 1 and checkt == 1) and len(sys.argv) < 5:
+        print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
+              "Must have an ignorefile even if it's an empty file"
+        return
+    elif (checkt == 1 or checks == 1) and len(sys.argv) < 4:
+        print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
+              "Must have an ignorefile even if it's an empty file"
+        return
     tab = contenu.split("};")
-    if ignorefile is not None:
-        updatename(ignorefile)
+    updatename(ignorefile)
     tabbuilds = puttabintab(tab, ignorefile)
     tabbuilds = formattab(tabbuilds)
-    if len(sys.argv) == 4 and sys.argv[1] == "-s":
+    if checks == 1:
         searchfile(tabbuilds, sys.argv[3])
-    elif len(sys.argv) == 4 and sys.argv[1] == "-t":
+    elif checkt == 1:
         targetfile(tabbuilds, sys.argv[3], ignorefile)
     else:
         showdiff(tabbuilds, ignorefile)
-    if ignorefile is not None:
-        inputignorefile.close()
+    inputignorefile.close()
     inputfile.close()
     print "ending !"
 
