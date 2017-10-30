@@ -152,8 +152,7 @@ def searchintarget(tab, str1, str2):
 
 
 def main():
-    checks = 0
-    checkt = 0
+    checks = checkt = 0
     if "-s" in sys.argv:
         checks = 1
     if "-t" in sys.argv:
