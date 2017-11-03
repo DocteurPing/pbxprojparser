@@ -103,6 +103,7 @@ def findMissingFiles(str1, str2, ignorefile):
             check2 = -1
         check = -1
         i1 = i1 + 1
+    print '\n'
     return check2
 
 # On affiche toutes les targets a qui il manque des fichiers
@@ -126,7 +127,7 @@ def searchFile(tab, str1):
     i = 0
     while i in xrange(len(tab)):
         if str1 in tab[i]:
-            print str1, "in file", nom[i]
+            print "file wich contains", str1, "in", nom[i]
         i = i + 1
 
 # On regarde si la target choisi existe
@@ -191,7 +192,7 @@ def main():
         print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
               "Must have an ignorefile even if it's an empty file"
         return
-    if ((checks == 1 and checkt == 1) and len(sys.argv) < 6) or ((checkt == 1 or checks == 1) and len(sys.argv) < 5):
+    if ((checks == 1 and checkt == 1) and len(sys.argv) < 6) or ((checkt == 1 or checks == 1) and len(sys.argv) < 4):
         print "use ./parser.py file.pbxproj [-s, -t] [string to search][]\n" \
               "Must have an ignorefile even if it's an empty file"
         return
