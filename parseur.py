@@ -2,6 +2,8 @@
 # coding=utf-8
 
 import sys
+import os
+import time
 
 nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "Banque Savoie Pro",
        "Credit Maritime Pro", "Banque Populaire Pro"]
@@ -13,25 +15,25 @@ def makeListTargetFromFile(tab, ignorefile):
     i = 0
     tabbuilds = []
     while i in xrange(len(tab)):
-        if "94026BDD15E24582001BBF61 /* Resources */ =" in tab[i] and "Credit Maritime" not in ignorefile:
+        if "94026BCA15E24582001BBF61 /* Sources */ =" in tab[i] and "Credit Maritime" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime ... ok"
-        if "94026C2515E24588001BBF61 /* Resources */ =" in tab[i] and "Banque de Savoie" not in ignorefile:
+        if "94026C1215E24588001BBF61 /* Sources */ =" in tab[i] and "Banque de Savoie" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque de Savoie ... ok"
-        if "94780DA213C5B3D300D2D360 /* Resources */ =" in tab[i] and "Banque Populaire" not in ignorefile:
+        if "94780DA013C5B3D300D2D360 /* Sources */ =" in tab[i] and "Banque Populaire" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire ... ok"
-        if "94780DC613C5B3D400D2D360 /* Resources */ =" in tab[i] and "iBP Test" not in ignorefile:
+        if "94780DC413C5B3D400D2D360 /* Sources */ =" in tab[i] and "iBP Test" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading iBP Test ... ok"
-        if "977A83441BE7657D0068058F /* Resources */ =" in tab[i] and "Banque Savoie Pro" not in ignorefile:
+        if "977A81C11BE7657D0068058F /* Sources */ =" in tab[i] and "Banque Savoie Pro" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque Savoie Pro ... ok"
-        if "97B876A41BE7618D00805A22 /* Resources */ =" in tab[i] and "Credit Maritime Pro" not in ignorefile:
+        if "97B875211BE7618D00805A22 /* Sources */ =" in tab[i] and "Credit Maritime Pro" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime Pro ... ok"
-        if "97FA28F91B03560F00F31B2C /* Resources */ =" in tab[i] and "Banque Populaire Pro" not in ignorefile:
+        if "97FA28231B03560F00F31B2C /* Sources */ =" in tab[i] and "Banque Populaire Pro" not in ignorefile:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire Pro ... ok"
         i = i + 1
@@ -47,8 +49,7 @@ def getFiles(tab):
     tabfiles = []
     i = 0
     while i in xrange(len(splittab)):
-        if ".xib" in splittab[i] or ".swift" in splittab[i] or ".m" in splittab[i] or ".storyboard" in splittab[i] or \
-                        ".xml" in splittab[i] or ".xcassets" in splittab[i]:
+        if ".swift" in splittab[i] or ".m" in splittab[i]:
             tab2 = splittab[i].split("*")
             tabfiles.append(tab2[1])
         i = i + 1
@@ -79,7 +80,7 @@ def selectTarget(files):
             intmax = i
             maxi = tab
         i = i + 1
-    print "selected build", intmax, "as default"
+    print "\nselected build", intmax, "as default\n"
     return intmax
 
 # On regarde si il y a une difference entre les differentes targets
@@ -91,19 +92,29 @@ def findMissingFiles(str1, str2, ignorefile):
     i1 = 0
     check = -1
     check2 = 0
+    total = []
+    sys.stdout.write('[')
+    sys.stdout.flush()
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
-            if tab1[i1] == tab2[i2] or tab1[i1] in ignorefile:
+            if tab1[i1] in ignorefile:
+                check = 0
+                break
+            if tab1[i1] == tab2[i2]:
                 check = 0
                 break
             i2 = i2 + 1
         if check == -1:
-            print tab1[i1], "is missing"
+            total.append(tab1[i1] + " is missing")
             check2 = -1
         check = -1
+        if i1 % 50 == 0:
+            sys.stdout.write('=')
+            sys.stdout.flush()
         i1 = i1 + 1
-    print '\n'
+    print '>'
+    print total
     return check2
 
 # On affiche toutes les targets a qui il manque des fichiers

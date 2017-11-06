@@ -1,9 +1,11 @@
-IBPCommandeFondsAccountsViewController.xib
-IBPCommandeFondsSummaryViewController.xib
-IBPCommandeFondsMoneyCell.xib
-IBPCommandeFondsConfirmViewController.xib
-IBPCommandeFondsFormViewController.xib
-IBPCommandeFondsSummaryCell.xib
-Images-CommonBanquePopulaire.xcassets
-Images-BanquePopulairePro.xcassets
+IBPCommandeFondsConfirmViewController.m is missing
+IBPCommandeFondsFormViewController.m is missing
+IBPApi+CommandeFonds.m is missing
+IBPCommandeFondsSummaryViewController.m is missing
+IBPCommandeFondsMoney.m is missing
+IBPCommandeFonds.m is missing
+IBPCommandeFondsSummaryCell.m is missing
+IBPCommandeFondsMoneyCell.m is missing
+IBPCommandeFondsAccountsViewController.m is missing
+IBPCommandeFondsConfig.m is missing
 iBP Test
