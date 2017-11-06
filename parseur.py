@@ -125,9 +125,9 @@ def showResultTest(tab, ignorefile):
     default = selectTarget(tab)
     while i in xrange(len(tab)):
         if findMissingFiles(tab[default], tab[i], ignorefile) == 0:
-            print '==========>', nom[i], "is good\n"
+            print nom[i], "is good\n"
         else:
-            print '==========>', nom[i], "check fail\n"
+            print nom[i], "check fail\n"
         i = i + 1
 
 
