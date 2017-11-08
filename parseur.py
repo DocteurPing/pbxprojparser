@@ -136,22 +136,14 @@ def checkignorefile(str1, ignorefile):
 def findMissingFiles(tab1, str2, ignorefile):
     tab2 = str2.split(" ")
     i1 = 0
-    check = -1
     check2 = 0
     total = []
     sys.stdout.write('[')
     sys.stdout.flush()
     while i1 in xrange(len(tab1)):
-        i2 = 0
-        while i2 in xrange(len(tab2)):
-            if tab1[i1] == tab2[i2] or checkignorefile(tab1[i1], ignorefile) == 0:
-                check = 0
-                break
-            i2 = i2 + 1
-        if check == -1:
+        if tab1[i1] not in tab2 and checkignorefile(tab1[i1], ignorefile) == -1:
             total.append(tab1[i1] + " is missing")
-            check2 = -1
-        check = -1
+            check2 = -1;
         if i1 % 30 == 0:
             sys.stdout.write('=')
             sys.stdout.flush()
