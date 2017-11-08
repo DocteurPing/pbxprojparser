@@ -2,8 +2,6 @@
 # coding=utf-8
 
 import sys
-import os
-import time
 
 nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "Banque Savoie Pro",
        "Credit Maritime Pro", "Banque Populaire Pro"]
@@ -15,37 +13,45 @@ def makeListTargetFromFile(tab, ignorefile):
     i = 0
     tabbuilds = []
     while i in xrange(len(tab)):
-        if "94026BCA15E24582001BBF61 /* Sources */ =" in tab[i] and "Credit Maritime" not in ignorefile:
+        if "94026BCA15E24582001BBF61 /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime ... ok"
-        if "94026C1215E24588001BBF61 /* Sources */ =" in tab[i] and "Banque de Savoie" not in ignorefile:
+        if "94026C1215E24588001BBF61 /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Banque de Savoie ... ok"
-        if "94780DA013C5B3D300D2D360 /* Sources */ =" in tab[i] and "Banque Populaire" not in ignorefile:
+        if "94780DA013C5B3D300D2D360 /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire ... ok"
-        if "94780DC413C5B3D400D2D360 /* Sources */ =" in tab[i] and "iBP Test" not in ignorefile:
+        if "94780DC413C5B3D400D2D360 /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading iBP Test ... ok"
-        if "977A81C11BE7657D0068058F /* Sources */ =" in tab[i] and "Banque Savoie Pro" not in ignorefile:
+        if "977A81C11BE7657D0068058F /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Banque Savoie Pro ... ok"
-        if "97B875211BE7618D00805A22 /* Sources */ =" in tab[i] and "Credit Maritime Pro" not in ignorefile:
+        if "97B875211BE7618D00805A22 /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime Pro ... ok"
-        if "97FA28231B03560F00F31B2C /* Sources */ =" in tab[i] and "Banque Populaire Pro" not in ignorefile:
+        if "97FA28231B03560F00F31B2C /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire Pro ... ok"
         i = i + 1
     return tabbuilds
 
 
-def checkignorefile(str1, ignorefile):
+def makeignorefile(ignorefile):
     tab = ignorefile.split("\n")
+    tabtotal = []
+    statut = -1
+    i2 = 0
     for i in xrange(len(tab)):
-        if tab[i] in str1:
-            return -1
-    return 0
+        if i2 in xrange(len(nom)) and nom[i2] in tab[i]:
+            i2 += 1
+            statut += 1
+            tabtotal.append("")
+            continue
+        if statut >= 0:
+            tabtotal[statut] += " " + tab[i]
+    return tabtotal
 
 
 def makefiletab(files, ignorefile):
@@ -61,9 +67,8 @@ def makefiletab(files, ignorefile):
                 tmp = line.split("*")
                 if 1 in xrange(len(tmp)):
                     tmp = tmp[1].split(" ")
-                    if tmp[1] not in tab and checkignorefile(tmp[1], ignorefile) == 0:
+                    if tmp[1] not in tab:
                         tab.append(tmp[1])
-    printtab(tab)
     return tab
 
 
@@ -116,10 +121,19 @@ def selectTarget(files):
     return 0
 
 
+def checkignorefile(str1, ignorefile):
+    tab = ignorefile.split(" ")
+    i = 1
+    while i in xrange(len(tab)):
+        if tab[i] in str1:
+            return 0
+        i += 1
+    return -1
+
+
 # On regarde si il y a une difference entre les differentes targets
 
-
-def findMissingFiles(tab1, str2):
+def findMissingFiles(tab1, str2, ignorefile):
     tab2 = str2.split(" ")
     i1 = 0
     check = -1
@@ -130,7 +144,7 @@ def findMissingFiles(tab1, str2):
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
-            if tab1[i1] == tab2[i2]:
+            if tab1[i1] == tab2[i2] or checkignorefile(tab1[i1], ignorefile) == 0:
                 check = 0
                 break
             i2 = i2 + 1
@@ -150,10 +164,10 @@ def findMissingFiles(tab1, str2):
 # On affiche toutes les targets a qui il manque des fichiers
 
 
-def showResultTest(tab, tabref):
+def showResultTest(tab, tabref, ignorefile):
     i = 0
     while i in xrange(len(tab)):
-        if findMissingFiles(tabref, tab[i]) == 0:
+        if findMissingFiles(tabref, tab[i], ignorefile[i]) == 0:
             print nom[i], "has no missing files\n"
         else:
             print nom[i], "check fail\n"
@@ -186,7 +200,7 @@ def checkIfTargetExist(str1):
 # On prend pour reference le fihcier passé en parametre
 
 
-def targetFile(tab, str1):
+def targetFile(tab, str1, ignorefile):
     default = checkIfTargetExist(str1)
     i = 0
     if default == -1:
@@ -194,7 +208,7 @@ def targetFile(tab, str1):
         return
     while i in xrange(len(tab)):
         print "checking for", nom[i], "...\n"
-        findMissingFiles(tab[default], tab[i])
+        findMissingFiles(tab[default], tab[i], ignorefile[i])
         i = i + 1
 
 
@@ -241,18 +255,18 @@ def main():
               "Must have an ignorefile even if it's an empty file"
         return
     tab = contenu.split("};")
-    updateListName(ignorefile)
     tabref = makefiletab(tab, ignorefile)
     tabbuilds = makeListTargetFromFile(tab, ignorefile)
     tabbuilds = getFileName(tabbuilds)
+    ignorefile = makeignorefile(ignorefile)
     if checks == 1 and checkt == 0:
         searchFile(tabbuilds, sys.argv[3])
     elif checkt == 1 and checks == 0:
-        targetFile(tabbuilds, sys.argv[3])
+        targetFile(tabbuilds, sys.argv[3], ignorefile)
     elif checks == 1 and checkt == 1:
         searchInTarget(tabbuilds, sys.argv[4], sys.argv[5])
     else:
-        showResultTest(tabbuilds, tabref)
+        showResultTest(tabbuilds, tabref, ignorefile)
     inputignorefile.close()
     inputfile.close()
     print "ending !"
