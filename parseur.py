@@ -214,7 +214,6 @@ def updateListName(ignorefile):
             del nom[i]
         i = i + 1
 
-
 # On regarde les targets qui ont le fichier passé en parametre dnas leur liste de fihcier
 
 
