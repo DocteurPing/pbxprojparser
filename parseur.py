@@ -37,8 +37,39 @@ def makeListTargetFromFile(tab, ignorefile):
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire Pro ... ok"
         i = i + 1
-    print ""
     return tabbuilds
+
+
+def checkignorefile(str1, ignorefile):
+    tab = ignorefile.split("\n")
+    for i in xrange(len(tab)):
+        if tab[i] in str1:
+            return -1
+    return 0
+
+
+def makefiletab(files, ignorefile):
+    tab = []
+    check = -1
+    for line in files:
+        if "Begin PBXBuildFile" in line:
+            check = 0
+        if "End PBXBuildFile" in line:
+            break
+        if check == 0:
+            if ".m" in line or ".swift" in line:
+                tmp = line.split("*")
+                if 1 in xrange(len(tmp)):
+                    tmp = tmp[1].split(" ")
+                    if tmp[1] not in tab and checkignorefile(tmp[1], ignorefile) == 0:
+                        tab.append(tmp[1])
+    printtab(tab)
+    return tab
+
+
+def printtab(tab):
+    for i in xrange(len(tab)):
+        print tab[i]
 
 
 # On reccupere seulement les fichiers utiles en regardant leurs extensions
@@ -67,6 +98,7 @@ def getFileName(tab):
         i = i + 1
     return tab
 
+
 # On choisi le fichier de reference. On fais ce choix par rapport à la target qui a le plus de fichier
 
 
@@ -80,14 +112,14 @@ def selectTarget(files):
             intmax = i
             maxi = tab
         i = i + 1
-    print "\nselected build", intmax, "as default\n"
-    return intmax
+    print "\nselected build", nom[intmax], "as default\n"
+    return 0
+
 
 # On regarde si il y a une difference entre les differentes targets
 
 
-def findMissingFiles(str1, str2, ignorefile):
-    tab1 = str1.split(" ")
+def findMissingFiles(tab1, str2):
     tab2 = str2.split(" ")
     i1 = 0
     check = -1
@@ -98,9 +130,6 @@ def findMissingFiles(str1, str2, ignorefile):
     while i1 in xrange(len(tab1)):
         i2 = 0
         while i2 in xrange(len(tab2)):
-            if tab1[i1] in ignorefile:
-                check = 0
-                break
             if tab1[i1] == tab2[i2]:
                 check = 0
                 break
@@ -109,23 +138,23 @@ def findMissingFiles(str1, str2, ignorefile):
             total.append(tab1[i1] + " is missing")
             check2 = -1
         check = -1
-        if i1 % 50 == 0:
+        if i1 % 30 == 0:
             sys.stdout.write('=')
             sys.stdout.flush()
         i1 = i1 + 1
-    print '>'
-    print total
+    print '>\n'
+    printtab(total)
     return check2
+
 
 # On affiche toutes les targets a qui il manque des fichiers
 
 
-def showResultTest(tab, ignorefile):
+def showResultTest(tab, tabref):
     i = 0
-    default = selectTarget(tab)
     while i in xrange(len(tab)):
-        if findMissingFiles(tab[default], tab[i], ignorefile) == 0:
-            print nom[i], "is good\n"
+        if findMissingFiles(tabref, tab[i]) == 0:
+            print nom[i], "has no missing files\n"
         else:
             print nom[i], "check fail\n"
         i = i + 1
@@ -141,6 +170,7 @@ def searchFile(tab, str1):
             print "file wich contains", str1, "in", nom[i]
         i = i + 1
 
+
 # On regarde si la target choisi existe
 
 
@@ -152,10 +182,11 @@ def checkIfTargetExist(str1):
         i = i + 1
     return -1
 
+
 # On prend pour reference le fihcier passé en parametre
 
 
-def targetFile(tab, str1, ignorefile):
+def targetFile(tab, str1):
     default = checkIfTargetExist(str1)
     i = 0
     if default == -1:
@@ -163,8 +194,9 @@ def targetFile(tab, str1, ignorefile):
         return
     while i in xrange(len(tab)):
         print "checking for", nom[i], "...\n"
-        findMissingFiles(tab[default], tab[i], ignorefile)
+        findMissingFiles(tab[default], tab[i])
         i = i + 1
+
 
 # On met a jour la liste des nom au cas ou il y ait un fichier à ignorer
 
@@ -175,6 +207,7 @@ def updateListName(ignorefile):
         if nom[i] in ignorefile:
             del nom[i]
         i = i + 1
+
 
 # On regarde les targets qui ont le fichier passé en parametre dnas leur liste de fihcier
 
@@ -209,16 +242,17 @@ def main():
         return
     tab = contenu.split("};")
     updateListName(ignorefile)
+    tabref = makefiletab(tab, ignorefile)
     tabbuilds = makeListTargetFromFile(tab, ignorefile)
     tabbuilds = getFileName(tabbuilds)
     if checks == 1 and checkt == 0:
         searchFile(tabbuilds, sys.argv[3])
     elif checkt == 1 and checks == 0:
-        targetFile(tabbuilds, sys.argv[3], ignorefile)
+        targetFile(tabbuilds, sys.argv[3])
     elif checks == 1 and checkt == 1:
         searchInTarget(tabbuilds, sys.argv[4], sys.argv[5])
     else:
-        showResultTest(tabbuilds, ignorefile)
+        showResultTest(tabbuilds, tabref)
     inputignorefile.close()
     inputfile.close()
     print "ending !"
