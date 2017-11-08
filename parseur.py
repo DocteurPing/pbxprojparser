@@ -9,7 +9,7 @@ nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "B
 
 # On reccupere les targets grace aux IDs en dur tout en regardant si ils ne sont pas dans le fichier ignorefile
 
-def makeListTargetFromFile(tab, ignorefile):
+def makeListTargetFromFile(tab):
     i = 0
     tabbuilds = []
     while i in xrange(len(tab)):
@@ -54,7 +54,7 @@ def makeignorefile(ignorefile):
     return tabtotal
 
 
-def makefiletab(files, ignorefile):
+def makefiletab(files):
     tab = []
     check = -1
     for line in files:
@@ -143,7 +143,7 @@ def findMissingFiles(tab1, str2, ignorefile):
     while i1 in xrange(len(tab1)):
         if tab1[i1] not in tab2 and checkignorefile(tab1[i1], ignorefile) == -1:
             total.append(tab1[i1] + " is missing")
-            check2 = -1;
+            check2 = -1
         if i1 % 30 == 0:
             sys.stdout.write('=')
             sys.stdout.flush()
@@ -247,8 +247,8 @@ def main():
               "Must have an ignorefile even if it's an empty file"
         return
     tab = contenu.split("};")
-    tabref = makefiletab(tab, ignorefile)
-    tabbuilds = makeListTargetFromFile(tab, ignorefile)
+    tabref = makefiletab(tab)
+    tabbuilds = makeListTargetFromFile(tab)
     tabbuilds = getFileName(tabbuilds)
     ignorefile = makeignorefile(ignorefile)
     if checks == 1 and checkt == 0:
