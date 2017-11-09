@@ -152,21 +152,12 @@ def showResultTest(tab, tabref, ignorefile):
 
 
 def main():
-    checks = checkt = 0
-    if "-s" in sys.argv:
-        checks = 1
-    if "-t" in sys.argv:
-        checkt = 1
     try:
         inputignorefile = open('ignorefile')
         ignorefile = inputignorefile.read()
         inputfile = open(sys.argv[1])
         contenu = inputfile.read()
     except:
-        print "use ./parser.py file.pbxproj\n" \
-              "Must have an ignorefile even if it's an empty file"
-        return
-    if ((checks == 1 and checkt == 1) and len(sys.argv) < 6) or ((checkt == 1 or checks == 1) and len(sys.argv) < 4):
         print "use ./parser.py file.pbxproj\n" \
               "Must have an ignorefile even if it's an empty file"
         return
