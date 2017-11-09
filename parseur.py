@@ -104,23 +104,6 @@ def getFileName(tab):
     return tab
 
 
-# On choisi le fichier de reference. On fais ce choix par rapport à la target qui a le plus de fichier
-
-
-def selectTarget(files):
-    i = 0
-    intmax = 0
-    maxi = []
-    while i in xrange(len(files)):
-        tab = files[i].split(" ")
-        if len(tab) > len(maxi):
-            intmax = i
-            maxi = tab
-        i = i + 1
-    print "\nselected build", nom[intmax], "as default\n"
-    return 0
-
-
 def checkignorefile(str1, ignorefile):
     tab = ignorefile.split(" ")
     i = 1
@@ -165,65 +148,7 @@ def showResultTest(tab, tabref, ignorefile):
             print nom[i], "check fail\n"
         i = i + 1
 
-
-# On cherche dans les targets si il y a un fichier correspondant à la recherche
-
-
-# def searchFile(tab, str1):
-#     i = 0
-#     while i in xrange(len(tab)):
-#         if str1 in tab[i]:
-#             print "file wich contains", str1, "in", nom[i]
-#         i = i + 1
-
-
-# On regarde si la target choisi existe
-
-
-def checkIfTargetExist(str1):
-    i = 0
-    while i in xrange(len(nom)):
-        if str1.lower() in nom[i].lower():
-            return i
-        i = i + 1
-    return -1
-
-
-# On prend pour reference le fihcier passé en parametre
-
-
-# def targetFile(tab, str1, ignorefile):
-#     default = checkIfTargetExist(str1)
-#     i = 0
-#     if default == -1:
-#         print "No target available"
-#         return
-#     while i in xrange(len(tab)):
-#         print "checking for", nom[i], "...\n"
-#         findMissingFiles(tab[default], tab[i], ignorefile[i])
-#         i = i + 1
-
-
 # On met a jour la liste des nom au cas ou il y ait un fichier à ignorer
-
-
-def updateListName(ignorefile):
-    i = 0
-    while i in xrange(len(nom)):
-        if nom[i] in ignorefile:
-            del nom[i]
-        i = i + 1
-
-# On regarde les targets qui ont le fichier passé en parametre dnas leur liste de fihcier
-
-
-# def searchInTarget(tab, str1, str2):
-#     default = checkIfTargetExist(str2)
-#     if default == -1:
-#         print "No target available"
-#         return
-#     if str1 in tab[default]:
-#         print str1, "in file", nom[default]
 
 
 def main():
@@ -250,13 +175,6 @@ def main():
     tabbuilds = makeListTargetFromFile(tab)
     tabbuilds = getFileName(tabbuilds)
     ignorefile = makeignorefile(ignorefile)
-    # if checks == 1 and checkt == 0:
-    #     searchFile(tabbuilds, sys.argv[3])
-    # elif checkt == 1 and checks == 0:
-    #     targetFile(tabbuilds, sys.argv[3], ignorefile)
-    # elif checks == 1 and checkt == 1:
-    #     searchInTarget(tabbuilds, sys.argv[4], sys.argv[5])
-    # else:
     showResultTest(tabbuilds, tabref, ignorefile)
     inputignorefile.close()
     inputfile.close()
