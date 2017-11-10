@@ -121,17 +121,11 @@ def findMissingFiles(tab1, str2, ignorefile):
     i1 = 0
     check2 = 0
     total = []
-    sys.stdout.write('[')
-    sys.stdout.flush()
     while i1 in xrange(len(tab1)):
         if tab1[i1] not in tab2 and checkignorefile(tab1[i1], ignorefile) == -1:
             total.append(tab1[i1] + " is missing")
             check2 = -1
-        if i1 % 30 == 0:
-            sys.stdout.write('=')
-            sys.stdout.flush()
         i1 = i1 + 1
-    print '>\n'
     printtab(total)
     return check2
 
