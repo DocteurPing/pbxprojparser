@@ -137,9 +137,9 @@ def showResultTest(tab, tabref, ignorefile):
     i = 0
     while i in xrange(len(tab)):
         if findMissingFiles(tabref, tab[i], ignorefile[i]) == 0:
-            print nom[i], "has no missing files\n"
+            print "\n", nom[i], "has no missing files\n"
         else:
-            print nom[i], "check fail\n"
+            print "\n", nom[i], "check fail\n"
         i = i + 1
 
 # On met a jour la liste des nom au cas ou il y ait un fichier à ignorer
