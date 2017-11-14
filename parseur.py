@@ -35,6 +35,7 @@ def makeListTargetFromFile(tab):
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire Pro ... ok"
         i = i + 1
+    print ""
     return tabbuilds
 
 
