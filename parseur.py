@@ -10,9 +10,8 @@ nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "B
 # On reccupere les targets grace aux IDs en dur tout en regardant si ils ne sont pas dans le fichier ignorefile
 
 def makeListTargetFromFile(tab):
-    i = 0
     tabbuilds = []
-    while i in xrange(len(tab)):
+    for i in xrange(len(tab)):
         if "94026BCA15E24582001BBF61 /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Credit Maritime ... ok"
@@ -34,7 +33,8 @@ def makeListTargetFromFile(tab):
         if "97FA28231B03560F00F31B2C /* Sources */ =" in tab[i]:
             tabbuilds.append(tab[i])
             print "Loading Banque Populaire Pro ... ok"
-        i = i + 1
+        if len(tab) == 7:
+            break
     print ""
     return tabbuilds
 
