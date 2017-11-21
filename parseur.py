@@ -2,6 +2,7 @@
 # coding=utf-8
 
 import sys
+import signal
 
 nom = ["Credit Maritime", "Banque de Savoie", "Banque Populaire", "iBP Test", "Banque Savoie Pro",
        "Credit Maritime Pro", "Banque Populaire Pro"]
@@ -148,7 +149,7 @@ def showResultTest(tab, tabref, ignorefile):
 
 def main():
     try:
-        inputignorefile = open('ignorefile')
+        inputignorefile = open(sys.argv[2])
         ignorefile = inputignorefile.read()
         inputfile = open(sys.argv[1])
         contenu = inputfile.read()
