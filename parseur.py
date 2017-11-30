@@ -137,20 +137,25 @@ def findMissingFiles(tab1, str2, ignorefile):
 
 def showResultTest(tab, tabref, ignorefile):
     i = 0
+    check = 0
     while i in xrange(len(tab)):
         if findMissingFiles(tabref, tab[i], ignorefile[i]) == 0:
             print "\n", nom[i], "has no missing files\n"
         else:
             print "\n", nom[i], "check fail\n"
+            check = -1
         i = i + 1
+    return check
 
 # On met a jour la liste des nom au cas ou il y ait un fichier à ignorer
 
 
 def main():
     try:
-        inputignorefile = open(sys.argv[2])
+        inputignorefile = open('ignorefile')
         ignorefile = inputignorefile.read()
+    except:
+    try:
         inputfile = open(sys.argv[1])
         contenu = inputfile.read()
     except:
@@ -162,10 +167,11 @@ def main():
     tabbuilds = makeListTargetFromFile(tab)
     tabbuilds = getFileName(tabbuilds)
     ignorefile = makeignorefile(ignorefile)
-    showResultTest(tabbuilds, tabref, ignorefile)
+    check = showResultTest(tabbuilds, tabref, ignorefile)
     inputignorefile.close()
     inputfile.close()
     print "ending !"
+    return check
 
 
 if __name__ == "__main__":
