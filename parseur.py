@@ -152,14 +152,12 @@ def showResultTest(tab, tabref, ignorefile):
 
 def main():
     try:
-        inputignorefile = open('ignorefile')
+        inputignorefile = open(sys.argv[2])
         ignorefile = inputignorefile.read()
-    except:
-    try:
         inputfile = open(sys.argv[1])
         contenu = inputfile.read()
     except:
-        print "use ./parser.py file.pbxproj\n" \
+        print "use ./parser.py file.pbxproj ignorefile\n" \
               "Must have an ignorefile even if it's an empty file"
         return
     tab = contenu.split("};")
@@ -171,7 +169,7 @@ def main():
     inputignorefile.close()
     inputfile.close()
     print "ending !"
-    return check
+    exit(check)
 
 
 if __name__ == "__main__":
